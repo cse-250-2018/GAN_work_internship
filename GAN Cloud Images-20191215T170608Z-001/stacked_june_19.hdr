@@ -1,0 +1,37 @@
+BANDS:     10
+ROWS:     499
+COLS:     499
+INTERLEAVING:   BIL
+DATATYPE: U16  
+BYTE_ORDER: INTEL   
+UL_X_COORDINATE:         662350.000000
+UL_Y_COORDINATE:        3340640.000000
+LR_X_COORDINATE:         667330.000000
+LR_Y_COORDINATE:        3335660.000000
+PIXEL_WIDTH:             10.0000000
+PIXEL_HEIGHT:             10.0000000
+MAP_UNITS:    meters               
+PROJECTION_NAME: UTM                                     
+PROJECTION_ZONE:    43
+PROJECTION_PARAMETERS:
+	             0.000000
+	             0.000000
+	             0.000000
+	             1.000000
+	             0.000000
+	             0.000000
+	             0.000000
+	             1.000000
+	             0.000000
+	             0.000000
+	             0.000000
+	             0.000000
+	             0.000000
+	             0.000000
+	             0.000000
+SPHEROID_NAME: WGS 84                                  
+DATUM_NAME:    WGS 84                                  
+SEMI_MAJOR_AXIS:        6378137.000000
+SEMI_MINOR_AXIS:        6356752.314245
+E_SQUARED:                    0.006694
+RADIUS:                 6371007.180918
