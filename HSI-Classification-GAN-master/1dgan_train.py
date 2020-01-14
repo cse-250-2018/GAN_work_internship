@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import cv2
+# import cv2
 from numpy import zeros
 from numpy import ones
 from numpy import expand_dims

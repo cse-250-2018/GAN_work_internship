@@ -5,6 +5,9 @@ from numpy import ones
 from numpy import expand_dims
 from numpy.random import randn
 from numpy.random import randint
+# import BatchNormalization
+from keras.layers.normalization import BatchNormalization
+
 from keras.datasets.fashion_mnist import load_data
 from keras.optimizers import Adam
 from keras.models import Model,Sequential
@@ -107,8 +110,22 @@ fig, (ax1, ax2, ax3)  = plt.subplots(3,figsize=(10, 10))
 ax1.imshow(image_label_overlay)
 image_label_overlay = label2rgb(fullDataY.to_numpy().reshape(145,145))
 ax2.imshow(image_label_overlay)
-image_label_overlay = label2rgb(clf.predict(fullDataX.to_numpy()).reshape(145,145)  )
-ax3.imshow(image_label_overlay)
+# image_label_overlay = label2rgb(clf.predict(fullDataX.to_numpy()).reshape(145,145)  )
+# ax3.imshow(image_label_overlay)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
