@@ -43,23 +43,39 @@ set_random_seed(42)
 #load dataset
 import numpy as np
 data = np.load('dataset/ds.npy')
-print(type(data))
-print(data.shape)
-print(data)
+# print(type(data))
+# print(data.shape)
+# print(data)
 gt = np.load('dataset/gt.npy')
-#print(type(gt))
-#print(gt.shape)
-#print(gt)
-# SARFARAZ MOdified
+# #print(type(gt))
+# #print(gt.shape)
+# #print(gt)
+# # SARFARAZ MOdified
 gt1 = gt.reshape(21025,)
-print(type(gt1))
-print(gt1)
+# print(type(gt1))
+# print(gt1)
 H = data.shape[0]
 W = data.shape[1]
+
+
+####doing this for true band image 
+from numpy import asarray
+
+from numpy import loadtxt
+# data = loadtxt('/home/sarfaraz/Desktop/isro@internship/task3/false_image.csv',delimiter=',')
+# gt = loadtxt('/home/sarfaraz/Desktop/isro@internship/task3/true_image.csv',delimiter=',')
+
+# data = np.load('/home/sarfaraz/Desktop/isro@internship/task3/stacked_june19_true_npy.npy')
+# gt = np.load('/home/sarfaraz/Desktop/isro@internship/task3/stacked_june24_false_npy.npy')
+# gt1 = gt.reshape(249001,)
+
+
+
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 def define_discriminator(in_shape=(10,1), n_classes=17):
+    print("discriminator architecture")
     model = Sequential()
 
     model.add(Conv1D(256, kernel_size=4, strides=1, input_shape=in_shape, padding="same"))
@@ -78,6 +94,7 @@ def define_discriminator(in_shape=(10,1), n_classes=17):
     features = model(img)
     validity = Dense(1, activation="sigmoid")(features)
     label = Dense(n_classes, activation="softmax")(features)
+    
     model = Model(img, [validity, label])
     opt = Adam(lr=0.0002, beta_1=0.5)
     model.summary()
@@ -85,7 +102,7 @@ def define_discriminator(in_shape=(10,1), n_classes=17):
     return model
 
 def define_generator(latent_dim, n_classes=17):
-
+    print("generator architecture")
     model = Sequential()
     model.add(Dense(512, activation="relu", input_dim=latent_dim))
     model.add(Reshape((1, 512)))
@@ -114,7 +131,8 @@ def define_generator(latent_dim, n_classes=17):
 
 
 
-voxel = data.reshape(-1,data.shape[2])
+voxel = data.reshape(-1,data.shape[2])  #sarfaraz modified
+voxel = data
 scaler = StandardScaler()
 voxel = scaler.fit_transform(voxel)
 pca = PCA(n_components=10)
@@ -123,9 +141,10 @@ principalDf = pd.DataFrame(data = principalComponents, columns = ['pc'+str(x) fo
 fullDataX = principalDf
 fullDataY = pd.DataFrame(data=gt1)
 #fullDataY = fullDataY.reshape(21025,1)
-X_train, X_test, y_train, y_test = train_test_split(principalDf, fullDataY, test_size=0.20)
-ax = sns.barplot( x=["pc"+str(i) for i in range(10)],y=pca.explained_variance_)
-ax.set_title("PCA")
+X_train, X_test, y_train, y_test = train_test_split(principalDf, fullDataY, test_size=0.20) # sarfaraz modified
+X_train , Y_train = fullDataX, fullDataY
+# ax = sns.barplot( x=["pc"+str(i) for i in range(10)],y=pca.explained_variance_)# sarfaraz modified
+# ax.set_title("PCA")# sarfaraz modified
 
 
 def generate_real_test_samples(n_samples):

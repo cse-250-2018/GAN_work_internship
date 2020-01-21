@@ -12,6 +12,20 @@ from keras.layers import Input
 from keras.layers import Dense
 from keras.layers import Reshape
 from keras.layers import Flatten
+from keras.layers import Conv2D,Conv1D,multiply# -*- coding: utf-8 -*-
+# import cv2
+from numpy import zeros
+from numpy import ones
+from numpy import expand_dims
+from numpy.random import randn
+from numpy.random import randint
+from keras.datasets.fashion_mnist import load_data
+from keras.optimizers import Adam
+from keras.models import Model,Sequential
+from keras.layers import Input
+from keras.layers import Dense
+from keras.layers import Reshape
+from keras.layers import Flatten
 from keras.layers import Conv2D,Conv1D,multiply
 from keras.layers import Conv2DTranspose
 from keras.layers import LeakyReLU
@@ -42,8 +56,9 @@ set_random_seed(42)
 
 #load dataset
 import numpy as np
-data = np.load('dataset/ds.npy')
-gt = np.load('dataset/gt.npy')
+data = np.load('/home/sarfaraz/Desktop/isro@internship/HSI-Classification-GAN-master/dataset/ds.npy')
+gt = np.load('/home/sarfaraz/Desktop/isro@internship/HSI-Classification-GAN-master/dataset/gt.npy')
+# gt.shape[0]
 H = data.shape[0]
 W = data.shape[1]
 from sklearn.model_selection import train_test_split
@@ -111,8 +126,14 @@ pca = PCA(n_components=10)
 principalComponents = pca.fit_transform(voxel)
 principalDf = pd.DataFrame(data = principalComponents, columns = ['pc'+str(x) for x in range(10)])
 fullDataX = principalDf
-fullDataY = pd.DataFrame(data=gt)
-X_train, X_test, y_train, y_test = train_test_split(principalDf, pd.DataFrame(data=gt), test_size=0.20)
+#originall it was 
+# fullDataY = pd.DataFrame(data=gt)
+
+fullDataY = pd.DataFrame(data=gt.reshape(gt.shape[0]*gt.shape[1],1))
+#originall it was 
+# X_train, X_test, y_train, y_test = train_test_split(principalDf, pd.DataFrame(data=gt), test_size=0.20)
+X_train, X_test, y_train, y_test = train_test_split(principalDf,fullDataY, test_size=0.20)
+
 ax = sns.barplot( x=["pc"+str(i) for i in range(10)],y=pca.explained_variance_)
 ax.set_title("PCA")
 
@@ -152,7 +173,7 @@ def summarize_performance(step, g_model, latent_dim):
 
 
 
-def train(g_model, d_model, gan_model, latent_dim, n_epochs=400, n_batch=2048):
+def train(g_model, d_model, gan_model, latent_dim, n_epochs=1, n_batch=2048):
 	import warnings
 	warnings.filterwarnings("ignore")
 	bat_per_epo = int(15000 / n_batch)
