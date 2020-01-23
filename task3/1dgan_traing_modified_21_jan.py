@@ -54,7 +54,7 @@ import matplotlib.pyplot as plt
 
 import keras.backend as K
 K.set_learning_phase(1)
-
+from keras.utils.vis_utils import plot_model
 from keras import applications, layers
 from numpy.random import seed
 from tensorflow import set_random_seed
@@ -96,6 +96,7 @@ def define_discriminator(in_shape=(10,1), n_classes=17):
     model.add(Conv1D(128, kernel_size=4, strides=1, padding="same"))
 
     model.add(Flatten())
+    plot_model(model, to_file='discriminator_plot.png', show_shapes=True, show_layer_names=True);
     model.summary()
 
     img = Input(shape=in_shape)
@@ -104,6 +105,8 @@ def define_discriminator(in_shape=(10,1), n_classes=17):
     label = Dense(n_classes, activation="softmax")(features)
     model = Model(img, [validity, label])
     opt = Adam(lr=0.0002, beta_1=0.5)
+    print("\n\n\n\nDiscriminator: -----------------------------\n");
+    # plot_model(model, to_file='discriminator_plot.png', show_shapes=True, show_layer_names=True);
     model.summary()
     model.compile(loss=['binary_crossentropy', 'sparse_categorical_crossentropy'], optimizer=opt, metrics=['accuracy'])
     return model
@@ -124,12 +127,14 @@ def define_generator(latent_dim, n_classes=17):
     model.add(BatchNormalization(momentum=0.8))
     model.add(Conv1D(1, kernel_size=4, padding='same'))
     model.add(Activation("tanh"))
+    plot_model(model, to_file='generator_plot.png', show_shapes=True, show_layer_names=True);
+    print("\n\n\n\nGenerator :-------------------------------------------------------\n")
     model.summary()
 
     noise = Input(shape=(latent_dim,))
     label = Input(shape=(1,), dtype='int32')
     label_embedding = Flatten()(Embedding(n_classes, latent_dim)(label))
-
+    
     model_input = multiply([noise, label_embedding])
     img = model(model_input)
 
